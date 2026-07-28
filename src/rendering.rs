@@ -9,7 +9,7 @@ pub enum Color {
     WHITE,
     RESET,
 }
-pub fn switch_color(col: &Color) -> &str {
+pub fn switch_color(col: Color) {
     let output: &str;
     match col {
         Color::BLACK => output = "\x1B[30m",
@@ -23,7 +23,7 @@ pub fn switch_color(col: &Color) -> &str {
         Color::RESET => output = "\x1B[39m",
     }
 
-    return output;
+    print!("{output}");
 }
 
 pub fn clear_terminal() {

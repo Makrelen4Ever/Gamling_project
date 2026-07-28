@@ -1,5 +1,7 @@
 use std::ops::{Add};
 
+use rand::{RngExt, rng};
+
 #[derive(Copy, Clone)]
 pub struct Card
 {
@@ -81,5 +83,65 @@ impl Deck {
         return  Deck {
             cards: card_buffer,
         };
+    }
+}
+
+pub struct Hand
+{
+    pub cards: Vec<Card>,
+    pub value: usize,
+}
+
+impl Hand
+{
+    pub fn new() -> Hand
+    {
+        Hand {
+            cards: Vec::new(),
+            value: 0
+        }
+    }
+
+    pub fn draw_cards(&mut self, amount: usize, deck: &mut Deck)
+    {
+        for i in 0..amount
+        {
+            let mut drawn_card: &mut Card = &mut deck.cards[rng().random_range(0..51)];
+
+            while drawn_card.has_been_dealt {
+                drawn_card = &mut deck.cards[rng().random_range(0..51)];
+            }
+    
+            drawn_card.has_been_dealt = true;
+            self.cards.push(*drawn_card);
+        }
+    }
+
+    pub fn render_hand(&self)
+    {
+        for card in &self.cards {
+            card.render();
+            print!(" ");
+        }
+    }
+
+    pub fn calculate_hand(&mut self)
+    {
+        let mut has_ace: bool = false;
+
+        self.value = 0;
+        for card in &self.cards {
+            if card.val == 1
+            {
+                has_ace = true;
+            }
+            
+            self.value += card.val;
+        }
+
+        if(has_ace && self.value <= 11)
+        {
+            self.value += 10;
+        }
     }
 }
