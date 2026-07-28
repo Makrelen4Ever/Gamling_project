@@ -117,11 +117,16 @@ impl Hand
         }
     }
 
-    pub fn render_hand(&self)
+    pub fn render_hand(&self, show_full: bool)
     {
-        for card in &self.cards {
-            card.render();
-            print!(" ");
+        if show_full
+        {
+            for card in &self.cards {
+                card.render();
+                print!(" ");
+            }
+        }else {
+            self.cards[0].render();
         }
     }
 

@@ -7,6 +7,7 @@ impl Game
     pub fn black_jack(&mut self) {
         clear_terminal();
 
+        //Initialization
         let mut deck: Deck = Deck::new();
         let mut player_hand: Hand = Hand::new();
         let mut dealer_hand: Hand = Hand::new();
@@ -21,6 +22,7 @@ impl Game
 
         let mut user_input: String;
 
+        //Pregame, storing bets
         println!("Enter your bet:");
         loop {
             switch_color(Color::RESET);
@@ -57,20 +59,21 @@ impl Game
             }
         }
 
+        //In game: hitting, standing and doubling down
         loop {
             user_input = String::new();
 
             switch_color(Color::RESET);
             println!("Dealer hand:");
-            dealer_hand.render_hand();
+            dealer_hand.render_hand(false);
 
             print!("\n");
 
             dealer_hand.calculate_hand();
-            println!("Dealer total value: {0}", dealer_hand.value);
+            println!("Dealer total value: {0}", dealer_hand.cards[0].val);
             
             println!("Your hand:");
-            player_hand.render_hand();
+            player_hand.render_hand(true);
 
             print!("\n");
 
@@ -144,6 +147,7 @@ impl Game
 
         clear_terminal();
 
+        //Post game, draw dealers cards, and check who won
         dealer_hand.calculate_hand();
 
         if !player_busted
@@ -156,12 +160,12 @@ impl Game
 
         print!("\n");
 
-        dealer_hand.render_hand();
+        dealer_hand.render_hand(true);
         println!("\nDealer total value: {0}", dealer_hand.value);
         
         print!("\n");
 
-        player_hand.render_hand();
+        player_hand.render_hand(true);
         println!("\nPlayer total value: {0}", player_hand.value);
 
         if ((player_hand.value > dealer_hand.value && player_hand.value <= 21) || dealer_hand.value > 21) && !player_busted
@@ -185,7 +189,9 @@ impl Game
             }
 
         }else {
+
             println!("\n Push!");
+        
         }
 
         switch_color(Color::RESET);
